@@ -223,7 +223,7 @@ public class Review {
                 String.format("%d/%d", currCardNum, totalNumCards));
         Pair<String, String> currentScore = new Pair<>("Current Score: ",
                  String.format("%d", getTotalScore()));
-        Pair<String, String> placeholder = new Pair<>("","");
+        Pair<String, String> placeholder = new Pair<>("", "");
         this.reviewStatsList.clear();
         this.reviewStatsList.addAll(title, cardsSeen, currentScore, placeholder);
     }

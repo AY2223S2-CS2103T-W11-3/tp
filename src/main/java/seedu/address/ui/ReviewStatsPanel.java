@@ -39,12 +39,11 @@ public class ReviewStatsPanel extends UiPart<Region> {
 
             } else {
                 setGraphic(new ReviewStat(pair).getRoot());
-                if(pair.getKey().equals("") && pair.getValue().equals("")) {
+                if (pair.getKey().equals("") && pair.getValue().equals("")) {
                     setPrefHeight(300);
                     setStyle("-fx-border-insets: 10px; -fx-background-insets: 10px;  "
                             + "-fx-background-image: url(/images/navguide.png); -fx-background-size: cover;");
-                }
-                else {
+                } else {
                     setStyle("-fx-border-insets: 10px; -fx-background-insets: 10px;  "
                             + "-fx-background-color:transparent ");
                 }
