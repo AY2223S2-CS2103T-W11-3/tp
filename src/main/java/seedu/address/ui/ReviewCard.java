@@ -1,20 +1,19 @@
 package seedu.address.ui;
 
-import java.util.Comparator;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.card.Card;
+import seedu.address.model.tag.Tag;
 
 /**
  * A UI component that displays information of a flipped {@code Card} under review.
  */
-public class FlippedReviewCard extends UiPart<Region> {
+public class ReviewCard extends UiPart<Region> {
     private static final String EMPTY_STRING = "";
-    private static final String FXML = "FlippedReviewCard.fxml";
+    private static final String FXML = "ReviewCard.fxml";
 
     /**
      * Note: Certain keywords such as "location" and "resources" are reserved keywords in JavaFX.
@@ -38,17 +37,22 @@ public class FlippedReviewCard extends UiPart<Region> {
     /**
      * Creates a {@code PersonCode} with the given {@code Card} and index to display.
      */
-    public FlippedReviewCard(Card card) {
+    public ReviewCard(Card card) {
         super(FXML);
         this.card = card;
 
         question.setText(card.getQuestion().question);
 
-        answer.setText(card.getAnswer().answer);
+        answer.setText(EMPTY_STRING);
 
-        card.getTags().stream()
-                .sorted(Comparator.comparing(tag -> tag.tagName))
-                .forEach(tag -> tags.getChildren().add(new PersonCard.CardTag(tag.tagName)));
+        if (!card.getTag().tagName.equals(Tag.TagName.UNTAGGED)) {
+            tags.getChildren().add(new PersonCard.CardTag(card.getTagName()));
+        }
+
+        if (card.isFlipped()) {
+            this.getRoot().setStyle("-fx-background-color: #6c68c3;");
+            answer.setText(card.getAnswer().answer);
+        }
     }
 
     @Override

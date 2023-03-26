@@ -12,6 +12,7 @@ import java.util.List;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.cardcommands.EditCommand;
+import seedu.address.logic.commands.commandresult.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.MasterDeck;
 import seedu.address.model.Model;
@@ -59,10 +60,10 @@ public class CommandTestUtil {
         DESC_GRAVITY = new EditCardDescriptorBuilder()
                 .withQuestion(VALID_QUESTION_GRAVITY)
                 .withAnswer(VALID_ANSWER_GRAVITY)
-                .withTags(VALID_TAG_MEDIUM).build();
+                .withTag(VALID_TAG_MEDIUM).build();
         DESC_PHOTOSYNTHESIS = new EditCardDescriptorBuilder()
                 .withQuestion(VALID_QUESTION_PHOTOSYNTHESIS).withAnswer(VALID_ANSWER_PHOTOSYNTHESIS)
-                .withTags(VALID_TAG_HARD, VALID_TAG_MEDIUM).build();
+                .withTag(VALID_TAG_HARD).build();
     }
 
     /**
@@ -107,6 +108,7 @@ public class CommandTestUtil {
         assertEquals(expectedMasterDeck, actualModel.getMasterDeck());
         assertEquals(expectedFilteredList, actualModel.getFilteredCardList());
     }
+
     /**
      * Updates {@code model}'s filtered list to show only the card at the given {@code targetIndex} in the
      * {@code model}'s master deck.
@@ -118,6 +120,7 @@ public class CommandTestUtil {
         model.updateFilteredCardList(c -> c.getQuestion().question.equals(otherQuestion));
         assertEquals(1, model.getFilteredCardList().size());
     }
+
     /**
      * Updates {@code model}'s filtered list to show only the deck at the given {@code targetIndex} in the
      * {@code model}'s master deck.

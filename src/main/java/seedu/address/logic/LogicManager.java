@@ -4,15 +4,17 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.Command;
-import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.commandresult.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.MasterDeckParser;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.MasterDeck;
 import seedu.address.model.Model;
 import seedu.address.model.ModelState;
 import seedu.address.model.ReadOnlyMasterDeck;
@@ -89,8 +91,8 @@ public class LogicManager implements Logic {
         return model.getFilteredDeckList();
     }
 
-    public ObservableList<Pair<String, String>> getDeckNameList() {
-        return model.getDeckNameList();
+    public ObservableList<String> getDeckNameList() {
+        return FXCollections.observableArrayList(model.getSelectedDeckName());
     }
 
     @Override
@@ -121,5 +123,15 @@ public class LogicManager implements Logic {
     @Override
     public ObservableList<Pair<String, String>> getReviewDeckNameList() {
         return model.getReviewDeckNameList();
+    }
+
+    @Override
+    public void factoryReset() {
+        model.setMasterDeck(new MasterDeck());
+        try {
+            storage.saveMasterDeck(model.getMasterDeck());
+        } catch (IOException ioe) {
+            logger.info("Something went wrong while resetting data.");
+        }
     }
 }

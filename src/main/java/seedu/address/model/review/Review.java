@@ -56,7 +56,7 @@ public class Review {
         Collections.fill(scoreList, false);
 
         // initialise reviewStats
-        reviewStatsList = FXCollections.observableList(new ArrayList<Pair<String, String>>());
+        reviewStatsList = FXCollections.observableList(new ArrayList<>());
     }
 
     /**
@@ -135,7 +135,7 @@ public class Review {
 
     /**
      * Move to the next card to be under review.
-     * @return
+     * @return boolean indicating if card is the last card
      */
     public boolean goToNextCard() {
         boolean priorStateIsFlipped = currCard.isFlipped();
@@ -193,6 +193,10 @@ public class Review {
         updateReviewStatsList();
     }
 
+    public void setCard(Tag tag) {
+        currCard = new Card(currCard.getQuestion(), currCard.getAnswer(), tag, currCard.getDeck());
+    }
+
     public void unflipAllCards() {
         cardList.stream().forEach(Card::setAsUnflipped);
     }
@@ -200,15 +204,6 @@ public class Review {
     public void flipAllCards() {
         cardList.stream().forEach(Card::setAsFlipped);
     }
-
-    /**
-     * Tags current card in review based on enum Hard, Medium, Easy
-     * @param tag
-     */
-    public void tagCurrentCard(Tag tag) {
-        currCard.addTag(tag);
-    }
-
 
     public ObservableList<Pair<String, String>> getReviewStatsList() {
         updateReviewStatsList();

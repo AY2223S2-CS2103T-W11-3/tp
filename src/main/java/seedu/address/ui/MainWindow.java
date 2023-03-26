@@ -1,11 +1,14 @@
 package seedu.address.ui;
 
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
@@ -15,11 +18,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
-import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.commandresult.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -32,21 +34,19 @@ public class MainWindow extends UiPart<Stage> {
     private static final String FXML = "MainWindow.fxml";
     private static final Text MAIN_TITLE = new Text("Main");
     private static final Text REVIEW_TITLE = new Text("Review");
-    private static final ObservableList<Pair<String, String>> EMPTY_TITLE =
-            FXCollections.observableArrayList(new Pair<>("", ""));
-
+    private static final ObservableList<String> EMPTY_TITLE = FXCollections.observableArrayList("");
 
     private final Logger logger = LogsCenter.getLogger(getClass());
 
-    private Stage primaryStage;
-    private Logic logic;
+    private final Stage primaryStage;
+    private final Logic logic;
 
     // Independent Ui parts residing in this Ui container
     private PersonListPanel personListPanel;
     private UiPart<Region> leftPanel;
     private UiPart<Region> rightTitle;
     private ResultDisplay resultDisplay;
-    private HelpWindow helpWindow;
+    private final HelpWindow helpWindow;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -167,6 +167,10 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
+    void show() {
+        primaryStage.show();
+    }
+
     /**
      * Opens the help window or focuses on it if it's already opened.
      */
@@ -179,10 +183,6 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
-    void show() {
-        primaryStage.show();
-    }
-
     /**
      * Closes the application.
      */
@@ -193,6 +193,25 @@ public class MainWindow extends UiPart<Stage> {
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
         primaryStage.hide();
+    }
+
+    /**
+     * Creates a confirmation pop-up
+     */
+    public void handleClear() {
+        /* Creates a confirmation alert */
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Are you sure you want to clear all data?");
+
+        /* Creates buttons */
+        ButtonType buttonYes = new ButtonType("Yes");
+        ButtonType buttonNo = new ButtonType("No");
+        alert.getButtonTypes().setAll(buttonYes, buttonNo);
+
+        /* Checks user's answer */
+        Optional<ButtonType> answer = alert.showAndWait();
+        answer.filter(response -> response == buttonYes).ifPresent(unused -> logic.factoryReset());
     }
 
     /**
@@ -217,6 +236,8 @@ public class MainWindow extends UiPart<Stage> {
      * Shows the deck list panel.
      */
     public void handleEndReview() {
+        updateDeckTitle();
+
         leftPanel = new DeckListPanel(logic.getFilteredDeckList(), false);
         leftPanelPlaceholder.getChildren().clear();
         leftPanelPlaceholder.getChildren().add(leftPanel.getRoot());
@@ -228,23 +249,12 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Shows the deck Title.
+     * Updates the deck Title.
      */
-    public void handleSelectDeck() {
+    public void updateDeckTitle() {
         rightPanelTitlePlaceholder.getChildren().clear();
         rightTitle = new DeckNamePanel(logic.getDeckNameList());
         rightPanelTitlePlaceholder.getChildren().add(rightTitle.getRoot());
-
-    }
-
-    /**
-     * Hides the deck Title.
-     */
-    public void handleUnSelectDeck() {
-        rightPanelTitlePlaceholder.getChildren().clear();
-        rightTitle = new DeckNamePanel(logic.getDeckNameList());
-        rightPanelTitlePlaceholder.getChildren().add(rightTitle.getRoot());
-
     }
 
     /**
@@ -266,17 +276,20 @@ public class MainWindow extends UiPart<Stage> {
                 handleExit();
             }
 
+            if (commandResult.isClear()) {
+                handleClear();
+            }
+
             if (commandResult.isStartReview()) {
                 handleStartReview();
             }
 
             if (commandResult.isEndReview()) {
-                handleSelectDeck();
                 handleEndReview();
             }
 
             if (commandResult.isSelectDeck() || commandResult.isUnselectDeck()) {
-                handleSelectDeck();
+                updateDeckTitle();
             }
 
             return commandResult;

@@ -16,12 +16,11 @@ import java.util.function.Predicate;
 
 import org.junit.jupiter.api.Test;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.commandresult.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelState;
@@ -170,13 +169,6 @@ public class AddDeckCommandTest {
         @Override
         public Optional<Deck> getSelectedDeck() {
             return Optional.of(new Deck("Default"));
-        }
-
-        @Override
-        public ObservableList<Pair<String, String>> getDeckNameList() {
-            ObservableList<Pair<String, String> > placeholder = FXCollections.observableArrayList();
-            placeholder.add(new Pair("Current Deck:", "No deck selected!"));
-            return placeholder;
         }
 
         @Override

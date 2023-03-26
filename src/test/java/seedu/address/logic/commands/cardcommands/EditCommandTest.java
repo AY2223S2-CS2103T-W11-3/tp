@@ -32,7 +32,11 @@ import seedu.address.testutil.EditCardDescriptorBuilder;
  */
 public class EditCommandTest {
 
-    private Model model = new ModelManager(getTypicalMasterDeck(), new UserPrefs());
+    private final Model model = new ModelManager(getTypicalMasterDeck(), new UserPrefs());
+
+    {
+        model.updateFilteredCardList(Model.PREDICATE_SHOW_ALL_CARDS);
+    }
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -43,9 +47,10 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_CARD_SUCCESS, editedCard);
 
         Model expectedModel = new ModelManager(new MasterDeck(model.getMasterDeck()), new UserPrefs());
+        expectedModel.updateFilteredCardList(Model.PREDICATE_SHOW_ALL_CARDS);
         Card toEdit = model.getFilteredCardList().get(0); // card at first index
         Card toReplace = new Card(editedCard.getQuestion(), editedCard.getAnswer(),
-                editedCard.getTags(), toEdit.getDeck()); // new card is in the same deck as old card
+                editedCard.getTag(), toEdit.getDeck()); // new card is in the same deck as old card
         expectedModel.setCard(toEdit, toReplace);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -58,15 +63,16 @@ public class EditCommandTest {
 
         CardBuilder cardInList = new CardBuilder(lastCard);
         Card editedCard = cardInList.withQuestion(VALID_QUESTION_PHOTOSYNTHESIS)
-                .withTags(VALID_TAG_HARD).build();
+                .withTag(VALID_TAG_HARD).build();
 
         EditCardDescriptor descriptor = new EditCardDescriptorBuilder()
-                .withQuestion(VALID_QUESTION_PHOTOSYNTHESIS).withTags(VALID_TAG_HARD).build();
+                .withQuestion(VALID_QUESTION_PHOTOSYNTHESIS).withTag(VALID_TAG_HARD).build();
         EditCommand editCommand = new EditCommand(indexLastCard, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_CARD_SUCCESS, editedCard);
 
         Model expectedModel = new ModelManager(new MasterDeck(model.getMasterDeck()), new UserPrefs());
+        expectedModel.updateFilteredCardList(Model.PREDICATE_SHOW_ALL_CARDS);
         expectedModel.setCard(lastCard, editedCard);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -80,6 +86,7 @@ public class EditCommandTest {
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_CARD_SUCCESS, editedCard);
 
         Model expectedModel = new ModelManager(new MasterDeck(model.getMasterDeck()), new UserPrefs());
+        expectedModel.updateFilteredCardList(Model.PREDICATE_SHOW_ALL_CARDS);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }

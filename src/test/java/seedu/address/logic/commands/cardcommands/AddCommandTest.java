@@ -18,7 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.util.Pair;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.commandresult.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.MasterDeck;
 import seedu.address.model.Model;
@@ -71,9 +71,9 @@ public class AddCommandTest {
     @Test
     public void equals() {
         AddCommand.AddCardDescriptor questionGravity = new AddCardDescriptorBuilder()
-                .withQuestion("What is gravity").withAnswer("Not sure").withTags("easy").build();
+                .withQuestion("What is gravity").withAnswer("Not sure").withTag("easy").build();
         AddCommand.AddCardDescriptor questionPhoto = new AddCardDescriptorBuilder()
-                .withQuestion("What is photosynthesis").withAnswer("Not sure either").withTags("hard").build();
+                .withQuestion("What is photosynthesis").withAnswer("Not sure either").withTag("hard").build();
         AddCommand addACommand = new AddCommand(questionGravity);
         AddCommand addBCommand = new AddCommand(questionPhoto);
 
@@ -222,11 +222,6 @@ public class AddCommandTest {
 
         @Override
         public String getSelectedDeckName() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
-        public ObservableList<Pair<String, String> > getDeckNameList() {
             throw new AssertionError("This method should not be called.");
         }
 
