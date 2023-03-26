@@ -38,15 +38,17 @@ public class ReviewStatsPanel extends UiPart<Region> {
                 setText(null);
 
             } else {
-                setGraphic(new ReviewStat(pair).getRoot());
-                if (pair.getKey().equals("") && pair.getValue().equals("")) {
+                if (pair.getKey().equals("")) {
+                    System.out.println("creating the navguide instruction");
                     setPrefHeight(300);
                     setStyle("-fx-border-insets: 10px; -fx-background-insets: 10px;  "
                             + "-fx-background-image: url(/images/navguide.png); -fx-background-size: cover;");
                 } else {
+                    System.out.println("creating the navguide component");
                     setStyle("-fx-border-insets: 10px; -fx-background-insets: 10px;  "
                             + "-fx-background-color:transparent ");
                 }
+                setGraphic(new ReviewStat(pair).getRoot());
             }
         }
     }
