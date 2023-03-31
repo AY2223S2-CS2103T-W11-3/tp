@@ -276,13 +276,14 @@ public class MainWindow extends UiPart<Stage> {
      * Gets the argument from a command
      */
     private String getArgs(String commandText) {
-        return commandText.split(" ")[1];
+        return commandText.split(" ", 2)[1].trim();
     }
 
     /**
      * Displays the find parameters of cards
      */
     public void handleFindCards(String commandText) {
+        rightFilterText.getChildren().clear();
         Text args = new Text(FILTER_CARD_PREFIX + getArgs(commandText));
         rightFilterText.getChildren().add(args);
     }
@@ -291,6 +292,7 @@ public class MainWindow extends UiPart<Stage> {
      * Displays the find parameters of decks
      */
     public void handleFindDecks(String commandText) {
+        leftFilterText.getChildren().clear();
         Text args = new Text(FILTER_DECK_PREFIX + getArgs(commandText));
         leftFilterText.getChildren().add(args);
     }
