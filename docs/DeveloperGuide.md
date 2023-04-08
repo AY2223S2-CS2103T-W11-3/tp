@@ -287,7 +287,7 @@ Within the `Review` object, there is an `ObservableList` of a `Pair` of strings 
 - In a `Pair` of strings, the first string represents the title of the statistic while the second contains information about that respective statistic. (e.g. String 1: "Deck Name", String 2: "Chemistry")
 - These statistics are constantly updated whenever a command executed (e.g. tag current card with new difficulty) changes any of the above statistics of the review.
 
-The following is a sequence diagram shows a review is started:
+The following is a sequence diagram for when a review is started:
 
 ![ReviewSequenceDiagram](images/ReviewSequenceDiagram.png)
 
